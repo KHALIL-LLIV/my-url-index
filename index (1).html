@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مولّد رمز QR مجاني - أنشئ رمز QR لأي رابط أو نص</title>
+<meta name="description" content="أنشئ رمز QR مجانًا لأي رابط أو نص عربي، وحمّله بصيغة PNG. يعمل داخل متصفحك دون رفع بياناتك.">
+<style>
+  :root {
+    --bg1: #1e1b4b;
+    --bg2: #0f172a;
+    --card: rgba(255, 255, 255, 0.07);
+    --border: rgba(255, 255, 255, 0.15);
+    --text: #f1f5f9;
+    --muted: #94a3b8;
+    --accent: #6366f1;
+    --accent2: #22d3ee;
+    --ok: #34d399;
+    --warn: #fbbf24;
+    --err: #f87171;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    min-height: 100vh;
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    color: var(--text);
+    background: radial-gradient(circle at top right, var(--bg1), var(--bg2)) fixed;
+    line-height: 1.8;
+    padding: 20px;
+  }
+  .site-nav {
+    max-width: 760px;
+    margin: 0 auto 18px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+    justify-content: center;
+    font-size: .92rem;
+  }
+  .site-nav a { color: var(--muted); text-decoration: none; padding: 4px 2px; border-bottom: 2px solid transparent; }
+  .site-nav a:hover, .site-nav a.active { color: var(--text); border-bottom-color: var(--accent2); }
+  .container {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 36px 28px;
+    backdrop-filter: blur(14px);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+  }
+  .logo {
+    width: 64px; height: 64px;
+    margin: 0 auto 16px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px;
+  }
+  h1 { text-align: center; font-size: 1.7rem; margin-bottom: 6px; line-height: 1.4; }
+  h2 { font-size: 1.15rem; margin: 26px 0 8px; color: var(--text); }
+  .sub { text-align: center; color: var(--muted); margin-bottom: 28px; font-size: .95rem; }
+  .input-group { display: flex; gap: 10px; flex-wrap: wrap; }
+  input[type="text"], input[type="email"], textarea {
+    padding: 15px 18px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.3);
+    color: var(--text);
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  .input-group input[type="text"] { flex: 1 1 260px; direction: ltr; text-align: left; }
+  input:focus, textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+  }
+  button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: transform .15s, opacity .2s;
+  }
+  button:active { transform: scale(.97); }
+  .btn-main { padding: 15px 26px; color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+  .count { margin-top: 6px; min-height: 18px; font-size: .78rem; color: var(--muted); text-align: left; direction: rtl; }
+  .count.over { color: var(--err); font-weight: 600; }
+  .options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 18px;
+    padding: 14px;
+    border-radius: 14px;
+    background: rgba(0, 0, 0, 0.2);
+  }
+  .opt { display: flex; align-items: center; gap: 8px; font-size: .88rem; color: var(--muted); }
+  .opt input[type="color"] {
+    width: 34px; height: 34px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: none;
+    padding: 2px;
+    cursor: pointer;
+  }
+  .opt select {
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.4);
+    color: var(--text);
+    font-family: inherit;
+  }
+  .notes { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; }
+  .note {
+    font-size: .88rem;
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .note.error { color: var(--err); border-color: rgba(248, 113, 113, .5); }
+  .note.warn { color: var(--warn); border-color: rgba(251, 191, 36, .5); }
+  .note.good { color: var(--ok); border-color: rgba(52, 211, 153, .5); }
+  .note button {
+    padding: 6px 12px;
+    font-size: .8rem;
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--text);
+    border-radius: 10px;
+  }
+  .result {
+    display: none;
+    margin-top: 20px;
+    padding: 22px;
+    border-radius: 16px;
+    border: 1px dashed var(--ok);
+    background: rgba(52, 211, 153, 0.08);
+    text-align: center;
+    animation: pop .3s ease;
+  }
+  .result.show { display: block; }
+  .qr-box { display: inline-block; border-radius: 16px; overflow: hidden; line-height: 0; max-width: 100%; }
+  .qr-box canvas { max-width: 100%; height: auto; display: block; }
+  .meta { margin-top: 10px; color: var(--muted); font-size: .82rem; }
+  .actions { margin-top: 16px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .btn-dl { padding: 12px 22px; background: var(--ok); color: #052e1f; }
+  .btn-reset { padding: 12px 22px; background: transparent; color: var(--muted); border: 1px solid var(--border); }
+  .content p, .content li { color: #cbd5e1; font-size: .96rem; }
+  .content p { margin-bottom: 10px; }
+  .content ul, .content ol { padding-inline-start: 22px; margin-bottom: 10px; }
+  .content a { color: var(--accent2); }
+  .content details { background: rgba(0, 0, 0, 0.2); border-radius: 12px; padding: 10px 14px; margin-bottom: 8px; }
+  .content summary { cursor: pointer; font-weight: 600; color: var(--text); }
+  .content details p { margin: 8px 0 2px; }
+  .page-title { margin-bottom: 4px; }
+  .updated { text-align: center; color: var(--muted); font-size: .82rem; margin-bottom: 20px; }
+  .todo { background: rgba(251, 191, 36, .12); border: 1px dashed var(--warn); border-radius: 12px; padding: 10px 14px; color: var(--warn); font-size: .88rem; margin: 12px 0; }
+  .form-grid { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+  .form-grid label { font-size: .88rem; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
+  textarea { min-height: 130px; resize: vertical; }
+  .site-footer { max-width: 760px; margin: 18px auto 0; text-align: center; color: var(--muted); font-size: .82rem; }
+  .site-footer a { color: var(--muted); }
+  @keyframes pop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @media (max-width: 480px) {
+    .container { padding: 28px 18px; }
+    .btn-main { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<nav class="site-nav" aria-label="التنقل الرئيسي"><a href="index.html" class="active">الرئيسية</a><a href="about.html">عن الموقع</a><a href="privacy.html">سياسة الخصوصية</a><a href="contact.html">اتصل بنا</a></nav>
+<main class="container">
+  <div class="logo">▣</div>
+  <h1>مولّد رمز QR مجاني</h1>
+  <p class="sub">أدخل أي رابط أو نص واحصل على رمز QR جاهز للتحميل، بدون تسجيل وبدون رفع بياناتك</p>
+
+  <div class="input-group">
+    <input type="text" id="url" placeholder="https://example.com" autocomplete="off" aria-label="الرابط أو النص">
+    <button type="button" class="btn-main" id="go">إنشاء الرمز</button>
+  </div>
+  <div class="count" id="count" aria-live="polite"></div>
+
+  <div class="options">
+    <label class="opt">لون الرمز <input type="color" id="fg" value="#0f172a"></label>
+    <label class="opt">لون الخلفية <input type="color" id="bg" value="#ffffff"></label>
+    <label class="opt">الحجم
+      <select id="size">
+        <option value="240">صغير</option>
+        <option value="320" selected>متوسط</option>
+        <option value="400">كبير</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="notes" id="notes" aria-live="polite"></div>
+
+  <section class="result" id="result">
+    <div class="qr-box" id="qr"></div>
+    <div class="meta" id="meta"></div>
+    <div class="actions">
+      <button type="button" class="btn-dl" id="download">تحميل PNG</button>
+      <button type="button" class="btn-reset" id="reset">رمز جديد</button>
+    </div>
+  </section>
+</main>
+
+<article class="container content" style="margin-top:20px">
+  <h2 style="margin-top:0">كيف تنشئ رمز QR في ثلاث خطوات</h2>
+  <ol>
+    <li>اكتب الرابط أو النص في الحقل أعلاه، ويظهر الرمز تلقائيًا بعد توقفك عن الكتابة.</li>
+    <li>اختر لون الرمز وحجمه إن أردت، مع إبقاء الرمز داكنًا على خلفية فاتحة لأفضل قراءة.</li>
+    <li>اضغط «تحميل PNG» واستخدم الصورة في الطباعة أو المنشورات أو الشاشات.</li>
+  </ol>
+
+  <h2>نصائح ليُمسح الرمز بسهولة</h2>
+  <ul>
+    <li>اجعل الرمز داكنًا على خلفية فاتحة، فالرموز المعكوسة أو منخفضة التباين لا تقرؤها كل التطبيقات.</li>
+    <li>اترك هامشًا أبيض حول الرمز، وهو مضاف تلقائيًا في الصورة المحمّلة فلا تقصّه.</li>
+    <li>الرابط الأقصر يعطي رمزًا أقل كثافة وأسهل مسحًا، خصوصًا عند الطباعة بحجم صغير.</li>
+    <li>عند الطباعة اجعل الرمز بعرض 2 سم على الأقل، وجرّبه بهاتفك قبل الطباعة بكميات كبيرة.</li>
+    <li>ابدأ الروابط بـ https:// حتى تفتحها الكاميرا مباشرة كرابط.</li>
+  </ul>
+
+  <h2>أسئلة شائعة</h2>
+  <details><summary>هل الخدمة مجانية؟</summary><p>نعم، مجانية بالكامل وبدون حساب، ولا توجد علامة مائية على الصور.</p></details>
+  <details><summary>هل تحفظون الروابط التي أدخلها؟</summary><p>لا. يُنشأ الرمز داخل متصفحك، ولا يُرسل النص الذي تكتبه إلى خادم الموقع. التفاصيل في <a href="privacy.html">سياسة الخصوصية</a>.</p></details>
+  <details><summary>هل ينتهي الرمز بعد مدة؟</summary><p>لا. الرمز هنا «ثابت»، أي أن الرابط مكتوب داخل الرمز نفسه، فيبقى صالحًا ما دام الرابط يعمل. لكن لا يمكن تغيير الوجهة بعد الطباعة.</p></details>
+  <details><summary>ما أقصى طول مسموح به؟</summary><p>نحو 660 بايتًا. الحروف اللاتينية تأخذ بايتًا واحدًا والحرف العربي بايتين، فيتسع نحو 330 حرفًا عربيًا. وكلما طال النص صعب مسح الرمز.</p></details>
+  <details><summary>هل يدعم النص العربي؟</summary><p>نعم، يُرمَّز النص بصيغة UTF-8 وتقرؤه تطبيقات الكاميرا الحديثة. ننصح مع ذلك بتجربة الرمز بهاتفك قبل الاعتماد عليه.</p></details>
+  <details><summary>لماذا لا يمسح هاتفي الرمز؟</summary><p>أكثر الأسباب شيوعًا: تباين ضعيف بين اللونين، أو رمز صغير جدًا أو كثيف، أو انعكاس ضوء على الشاشة أو الورق. جرّب رمزًا أكبر بألوان داكنة وخلفية بيضاء.</p></details>
+  <p style="margin-top:14px;font-size:.8rem;color:#94a3b8">QR Code علامة تجارية مسجّلة لشركة DENSO WAVE INCORPORATED.</p>
+</article>
+<footer class="site-footer">© 2026 مولّد رمز QR · <a href="privacy.html">الخصوصية</a> · <a href="contact.html">اتصل بنا</a></footer>
+<script>
+function qrEncode(text) {
+  var bytes = Array.prototype.slice.call(new TextEncoder().encode(text));
+
+  // جدول مستوى التصحيح M: [رموز التصحيح لكل كتلة, عدد كتل المجموعة 1, بيانات الكتلة, عدد كتل المجموعة 2, بيانات الكتلة]
+  var EC = {
+    1:[10,1,16,0,0], 2:[16,1,28,0,0], 3:[26,1,44,0,0], 4:[18,2,32,0,0], 5:[24,2,43,0,0],
+    6:[16,4,27,0,0], 7:[18,4,31,0,0], 8:[22,2,38,2,39], 9:[22,3,36,2,37], 10:[26,4,43,1,44],
+    11:[30,1,50,4,51], 12:[22,6,36,2,37], 13:[22,8,37,1,38], 14:[24,4,40,5,41], 15:[24,5,41,5,42],
+    16:[28,7,45,3,46], 17:[28,10,46,1,47], 18:[26,9,43,4,44], 19:[26,3,44,11,45], 20:[26,3,41,13,42]
+  };
+
+  var ver = 0, cap = 0;
+  for (var v = 1; v <= 20; v++) {
+    var t = EC[v], c = t[1]*t[2] + t[3]*t[4];
+    if (4 + (v < 10 ? 8 : 16) + bytes.length*8 <= c*8) { ver = v; cap = c; break; }
+  }
+  if (!ver) { var tooLong = new Error('too long'); tooLong.code = 'TOO_LONG'; throw tooLong; }
+  var ecInfo = EC[ver];
+
+  // 1) تحويل البيانات إلى بتات
+  var bits = [];
+  function put(val, len) { for (var i = len-1; i >= 0; i--) bits.push((val >>> i) & 1); }
+  put(4, 4);
+  put(bytes.length, ver < 10 ? 8 : 16);
+  bytes.forEach(function (b) { put(b, 8); });
+  put(0, Math.min(4, cap*8 - bits.length));
+  while (bits.length % 8) bits.push(0);
+  for (var p = 0; bits.length < cap*8; p ^= 1) put(p ? 0x11 : 0xEC, 8);
+  var data = [];
+  for (var i = 0; i < bits.length; i += 8) {
+    var byte = 0;
+    for (var k = 0; k < 8; k++) byte = (byte << 1) | bits[i+k];
+    data.push(byte);
+  }
+
+  // 2) تصحيح الأخطاء Reed-Solomon
+  var exp = new Array(512), log = new Array(256), x = 1;
+  for (var e = 0; e < 255; e++) { exp[e] = x; log[x] = e; x <<= 1; if (x & 256) x ^= 0x11d; }
+  for (var e2 = 255; e2 < 512; e2++) exp[e2] = exp[e2-255];
+  function mul(a, b) { return (a && b) ? exp[log[a] + log[b]] : 0; }
+  function rsGen(n) {
+    var g = [1];
+    for (var i = 0; i < n; i++) {
+      var ng = new Array(g.length + 1).fill(0);
+      for (var j = 0; j < g.length; j++) { ng[j] ^= g[j]; ng[j+1] ^= mul(g[j], exp[i]); }
+      g = ng;
+    }
+    return g;
+  }
+  function rsRem(d, gen) {
+    var r = new Array(gen.length - 1).fill(0);
+    d.forEach(function (b) {
+      var f = b ^ r.shift();
+      r.push(0);
+      if (f) for (var i = 0; i < r.length; i++) r[i] ^= mul(gen[i+1], f);
+    });
+    return r;
+  }
+  var ecLen = ecInfo[0], gen = rsGen(ecLen), blocks = [], pos = 0;
+  [[ecInfo[1], ecInfo[2]], [ecInfo[3], ecInfo[4]]].forEach(function (grp) {
+    for (var b = 0; b < grp[0]; b++) {
+      var d = data.slice(pos, pos + grp[1]); pos += grp[1];
+      blocks.push({ d: d, e: rsRem(d, gen) });
+    }
+  });
+  var maxD = ecInfo[2] > ecInfo[4] ? ecInfo[2] : ecInfo[4], all = [];
+  for (var a = 0; a < maxD; a++) blocks.forEach(function (bl) { if (a < bl.d.length) all.push(bl.d[a]); });
+  for (var a2 = 0; a2 < ecLen; a2++) blocks.forEach(function (bl) { all.push(bl.e[a2]); });
+
+  // 3) بناء المصفوفة
+  var size = 17 + 4*ver, m = [], fn = [];
+  for (var r = 0; r < size; r++) { m.push(new Array(size).fill(false)); fn.push(new Array(size).fill(false)); }
+  function setFn(col, row, val) { m[row][col] = !!val; fn[row][col] = true; }
+  function bit(n, i) { return ((n >>> i) & 1) !== 0; }
+
+  for (var t2 = 0; t2 < size; t2++) { setFn(6, t2, t2 % 2 === 0); setFn(t2, 6, t2 % 2 === 0); }
+  function finder(cx, cy) {
+    for (var dy = -4; dy <= 4; dy++) for (var dx = -4; dx <= 4; dx++) {
+      var xx = cx + dx, yy = cy + dy;
+      if (xx < 0 || xx >= size || yy < 0 || yy >= size) continue;
+      var dist = Math.max(Math.abs(dx), Math.abs(dy));
+      setFn(xx, yy, dist !== 2 && dist !== 4);
+    }
+  }
+  finder(3, 3); finder(size-4, 3); finder(3, size-4);
+
+  var ap = [];
+  if (ver > 1) {
+    var n = Math.floor(ver/7) + 2;
+    var step = ver === 32 ? 26 : Math.ceil((ver*4 + 4) / (n*2 - 2)) * 2;
+    ap = [6];
+    for (var q = size - 7; ap.length < n; q -= step) ap.splice(1, 0, q);
+  }
+  ap.forEach(function (cy, i) { ap.forEach(function (cx, j) {
+    var last = ap.length - 1;
+    if ((i === 0 && j === 0) || (i === 0 && j === last) || (i === last && j === 0)) return;
+    for (var dy = -2; dy <= 2; dy++) for (var dx = -2; dx <= 2; dx++)
+      setFn(cx + dx, cy + dy, Math.max(Math.abs(dx), Math.abs(dy)) !== 1);
+  }); });
+
+  function drawFormat(mask) {
+    var d = mask, rem = d;
+    for (var i = 0; i < 10; i++) rem = (rem << 1) ^ ((rem >>> 9) * 0x537);
+    var f = ((d << 10) | rem) ^ 0x5412;
+    for (var i1 = 0; i1 <= 5; i1++) setFn(8, i1, bit(f, i1));
+    setFn(8, 7, bit(f, 6)); setFn(8, 8, bit(f, 7)); setFn(7, 8, bit(f, 8));
+    for (var i2 = 9; i2 < 15; i2++) setFn(14 - i2, 8, bit(f, i2));
+    for (var i3 = 0; i3 < 8; i3++) setFn(size - 1 - i3, 8, bit(f, i3));
+    for (var i4 = 8; i4 < 15; i4++) setFn(8, size - 15 + i4, bit(f, i4));
+    setFn(8, size - 8, true);
+  }
+  drawFormat(0);
+
+  if (ver >= 7) {
+    var rem2 = ver;
+    for (var i5 = 0; i5 < 12; i5++) rem2 = (rem2 << 1) ^ ((rem2 >>> 11) * 0x1F25);
+    var vb = (ver << 12) | rem2;
+    for (var i6 = 0; i6 < 18; i6++) {
+      var col = bit(vb, i6), a1 = size - 11 + i6 % 3, b1 = Math.floor(i6/3);
+      setFn(a1, b1, col); setFn(b1, a1, col);
+    }
+  }
+
+  // وضع البيانات بشكل متعرّج
+  var idx = 0;
+  for (var right = size - 1; right >= 1; right -= 2) {
+    if (right === 6) right = 5;
+    for (var vert = 0; vert < size; vert++) for (var j = 0; j < 2; j++) {
+      var cx2 = right - j, upward = ((right + 1) & 2) === 0, cy2 = upward ? size - 1 - vert : vert;
+      if (!fn[cy2][cx2] && idx < all.length * 8) { m[cy2][cx2] = bit(all[idx >>> 3], 7 - (idx & 7)); idx++; }
+    }
+  }
+
+  // 4) اختيار أفضل قناع
+  function applyMask(mask) {
+    for (var y = 0; y < size; y++) for (var xx = 0; xx < size; xx++) {
+      var inv;
+      switch (mask) {
+        case 0: inv = (xx + y) % 2 === 0; break;
+        case 1: inv = y % 2 === 0; break;
+        case 2: inv = xx % 3 === 0; break;
+        case 3: inv = (xx + y) % 3 === 0; break;
+        case 4: inv = (Math.floor(xx/3) + Math.floor(y/2)) % 2 === 0; break;
+        case 5: inv = xx*y % 2 + xx*y % 3 === 0; break;
+        case 6: inv = (xx*y % 2 + xx*y % 3) % 2 === 0; break;
+        default: inv = ((xx + y) % 2 + xx*y % 3) % 2 === 0;
+      }
+      if (!fn[y][xx] && inv) m[y][xx] = !m[y][xx];
+    }
+  }
+  function penalty() {
+    var score = 0, y, xx, i, run;
+    function line(get) {
+      run = 1;
+      for (i = 1; i < size; i++) {
+        if (get(i) === get(i-1)) { run++; if (run === 5) score += 3; else if (run > 5) score++; } else run = 1;
+      }
+      var s = '';
+      for (i = 0; i < size; i++) s += get(i) ? '1' : '0';
+      var re = /(?=(10111010000|00001011101))/g;
+      while (re.exec(s)) { score += 40; re.lastIndex++; }
+    }
+    for (y = 0; y < size; y++) line(function (i) { return m[y][i]; });
+    for (xx = 0; xx < size; xx++) line(function (i) { return m[i][xx]; });
+    var dark = 0;
+    for (y = 0; y < size; y++) for (xx = 0; xx < size; xx++) {
+      if (m[y][xx]) dark++;
+      if (y + 1 < size && xx + 1 < size && m[y][xx] === m[y][xx+1] && m[y][xx] === m[y+1][xx] && m[y][xx] === m[y+1][xx+1]) score += 3;
+    }
+    var total = size * size;
+    score += (Math.ceil(Math.abs(dark*20 - total*10) / total) - 1) * 10;
+    return score;
+  }
+  var best = 0, bestScore = Infinity;
+  for (var mk = 0; mk < 8; mk++) {
+    applyMask(mk); drawFormat(mk);
+    var sc = penalty();
+    if (sc < bestScore) { bestScore = sc; best = mk; }
+    applyMask(mk);
+  }
+  applyMask(best); drawFormat(best);
+  return m;
+}
+</script>
+<script>
+(function () {
+  var urlInput = document.getElementById('url');
+  var fgInput = document.getElementById('fg');
+  var bgInput = document.getElementById('bg');
+  var sizeInput = document.getElementById('size');
+  var notesEl = document.getElementById('notes');
+  var result = document.getElementById('result');
+  var qrBox = document.getElementById('qr');
+  var metaEl = document.getElementById('meta');
+  var goBtn = document.getElementById('go');
+  var downloadBtn = document.getElementById('download');
+  var resetBtn = document.getElementById('reset');
+  var countEl = document.getElementById('count');
+
+  var DEBOUNCE_MS = 400;     // ننتظر توقف المستخدم عن الكتابة قبل التوليد
+  var timer = null;
+  var runId = 0;             // يمنع نتيجة قديمة من الظهور بعد تغيّر المدخلات
+  var notes = [];
+
+  // ---------- عدّاد البايتات (يتحدّث فورًا مع كل حرف) ----------
+  var MAX_BYTES = 660;
+  function updateCount() {
+    var t = urlInput.value.trim();
+    if (!t) { countEl.textContent = ''; countEl.className = 'count'; return; }
+    var b = new TextEncoder().encode(t).length;
+    countEl.textContent = b + ' من ' + MAX_BYTES + ' بايت';
+    countEl.className = 'count' + (b > MAX_BYTES ? ' over' : '');
+  }
+
+  // ---------- التنبيهات ----------
+  function renderNotes() {
+    notesEl.innerHTML = '';
+    notes.forEach(function (n) {
+      var div = document.createElement('div');
+      div.className = 'note ' + n.kind;
+      var span = document.createElement('span');
+      span.textContent = n.text;
+      div.appendChild(span);
+      if (n.label) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = n.label;
+        b.addEventListener('click', n.action);
+        div.appendChild(b);
+      }
+      notesEl.appendChild(div);
+    });
+  }
+  function addNote(kind, text, label, action) {
+    notes.push({ kind: kind, text: text, label: label, action: action });
+    renderNotes();
+  }
+  function setText(value) { urlInput.value = value; generate(); }
+
+  // ---------- حساب التباين بين اللونين ----------
+  function luminance(hex) {
+    var c = [1, 3, 5].map(function (i) {
+      var v = parseInt(hex.substr(i, 2), 16) / 255;
+      return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+    });
+    return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+  }
+  function contrast(a, b) {
+    var l1 = luminance(a), l2 = luminance(b);
+    return (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+  }
+
+  // ---------- فحص النص ----------
+  // يعيد true إذا وُجد خطأ يمنع التوليد
+  function checkText(text) {
+    if (/^(javascript|data|vbscript|file):/i.test(text)) {
+      addNote('error', 'لا يُنشأ رمز لهذا النوع من الروابط لأنه قد يُستخدم لتنفيذ أوامر على جهاز من يمسحه.');
+      return true;
+    }
+    if (/^(www\.)?[a-z0-9-]+(\.[a-z0-9-]+)+(:\d+)?([\/?#]\S*)?$/i.test(text) && !/^[a-z][a-z0-9+.-]*:/i.test(text)) {
+      addNote('warn', 'يبدو هذا رابطًا بدون \u2066https://\u2069 وبعض الكاميرات لن تفتحه كرابط.', 'أضف \u2066https://\u2069',
+        function () { setText('https://' + text); });
+    } else if (/^http:\/\//i.test(text)) {
+      addNote('warn', 'الرابط يبدأ بـ \u2066http://\u2069 غير المشفّر، وقد تحذّر المتصفحات من فتحه.', 'حوّله إلى https',
+        function () { setText(text.replace(/^http:/i, 'https:')); });
+    }
+    if (/^https?:\/\//i.test(text)) {
+      if (/\s/.test(text)) {
+        addNote('warn', 'الرابط يحتوي على مسافات وقد لا يفتح بشكل صحيح.', 'رمّز المسافات',
+          function () { setText(text.replace(/\s/g, '%20')); });
+      } else if (/[^\x00-\x7F]/.test(text)) {
+        addNote('warn', 'الرابط يحتوي على أحرف غير لاتينية (مثل العربية). تتعامل معها التطبيقات بطرق مختلفة، والأضمن ترميزها.', 'رمّز الرابط',
+          function () { try { setText(encodeURI(text)); } catch (e) {} });
+      }
+    }
+    if (text.length > 300) {
+      addNote('warn', 'النص طويل (' + text.length + ' حرفًا)، فيصبح الرمز كثيف المربعات ويصعب مسحه من بعيد. قلّص الرابط أو اختصر النص إن أمكن.');
+    }
+    return false;
+  }
+
+  // ---------- الرسم ----------
+  function drawQR(matrix, target, fg, bg) {
+    var quiet = 4, modules = matrix.length + quiet * 2;
+    var cell = Math.max(1, Math.floor(target / modules));
+    var canvas = document.createElement('canvas');
+    canvas.width = canvas.height = cell * modules;
+    var ctx = canvas.getContext('2d');
+    ctx.fillStyle = bg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = fg;
+    for (var y = 0; y < matrix.length; y++)
+      for (var x = 0; x < matrix.length; x++)
+        if (matrix[y][x]) ctx.fillRect((x + quiet) * cell, (y + quiet) * cell, cell, cell);
+    return canvas;
+  }
+
+  // ---------- تحقق تلقائي (يعمل فقط في المتصفحات التي تدعم BarcodeDetector) ----------
+  function autoVerify(canvas, text, id) {
+    if (!('BarcodeDetector' in window)) return;
+    try {
+      new BarcodeDetector({ formats: ['qr_code'] }).detect(canvas).then(function (found) {
+        if (id !== runId) return;
+        if (found.length && found[0].rawValue === text) {
+          addNote('good', 'تم التحقق تلقائيًا: الرمز قابل للقراءة ✓');
+        } else {
+          addNote('warn', 'لم يستطع القارئ التلقائي قراءة هذا الرمز. جرّب لونًا أغمق للرمز وخلفية أفتح، ثم اختبره بكاميرا هاتفك.');
+        }
+      }).catch(function () {});
+    } catch (e) {}
+  }
+
+  // ---------- التوليد ----------
+  function generate() {
+    clearTimeout(timer);
+    updateCount();
+    runId++;
+    var id = runId;
+    notes = [];
+    var text = urlInput.value.trim();
+
+    if (!text) {
+      result.classList.remove('show');
+      qrBox.innerHTML = '';
+      renderNotes();
+      return;
+    }
+    if (checkText(text)) {
+      result.classList.remove('show');
+      qrBox.innerHTML = '';
+      renderNotes();
+      return;
+    }
+
+    var fg = fgInput.value, bg = bgInput.value, ratio = contrast(fg, bg);
+    if (luminance(fg) > luminance(bg)) {
+      addNote('warn', 'لون الرمز أفتح من الخلفية (رمز معكوس). كثير من القارئات لا تدعمه، والأضمن رمز داكن على خلفية فاتحة.');
+    } else if (ratio < 3) {
+      addNote('warn', 'التباين بين اللونين ضعيف (' + ratio.toFixed(1) + ':1) وقد يصعب مسح الرمز. اختر ألوانًا أبعد عن بعضها.');
+    }
+
+    try {
+      var matrix = qrEncode(text);
+      var canvas = drawQR(matrix, parseInt(sizeInput.value, 10), fg, bg);
+      qrBox.innerHTML = '';
+      qrBox.appendChild(canvas);
+      var bytes = new TextEncoder().encode(text).length;
+      metaEl.textContent = 'الإصدار ' + ((matrix.length - 17) / 4) + ' · ' + bytes + ' بايت · ' + matrix.length + '×' + matrix.length + ' مربعًا';
+      result.classList.add('show');
+      renderNotes();
+      autoVerify(canvas, text, id);
+    } catch (err) {
+      result.classList.remove('show');
+      qrBox.innerHTML = '';
+      if (err && err.code === 'TOO_LONG') {
+        addNote('error', 'النص طويل جدًا لإنشاء رمز QR هنا (الحد نحو 660 بايتًا، والحرف العربي يأخذ بايتين). جرّب نصًا أقصر.');
+      } else {
+        addNote('error', 'حدث خطأ غير متوقع أثناء إنشاء الرمز: ' + (err && err.message ? err.message : err));
+      }
+    }
+  }
+
+  // ---------- الأحداث ----------
+  goBtn.addEventListener('click', generate);
+  urlInput.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); generate(); }
+  });
+  urlInput.addEventListener('input', function () {
+    updateCount();
+    // نخفي كل التنبيهات القديمة فورًا بدل انتظار انتهاء التأخير
+    notes = [];
+    renderNotes();
+    clearTimeout(timer);
+    timer = setTimeout(generate, DEBOUNCE_MS);
+  });
+  [fgInput, bgInput, sizeInput].forEach(function (el) {
+    el.addEventListener('change', function () { if (urlInput.value.trim()) generate(); });
+  });
+
+  downloadBtn.addEventListener('click', function () {
+    var canvas = qrBox.querySelector('canvas');
+    if (!canvas) return;
+    var a = document.createElement('a');
+    a.href = canvas.toDataURL('image/png');
+    a.download = 'qrcode.png';
+    a.click();
+  });
+
+  resetBtn.addEventListener('click', function () {
+    clearTimeout(timer);
+    runId++;
+    notes = [];
+    renderNotes();
+    result.classList.remove('show');
+    qrBox.innerHTML = '';
+    urlInput.value = '';
+    updateCount();
+    urlInput.focus();
+  });
+})();
+</script>
+</body>
+</html>
